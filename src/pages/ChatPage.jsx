@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import Main from "../components/Main";
 
 const ChatPage = ({ room, setRoom }) => {
   const [text, setText] = useState();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (text.trim() === "") return;
-    alert("Sent");
+
+    const messagesCol = collection(db, "messages");
+
+    await addDoc(messagesCol, {
+      text,
+      room,
+      author: {
+        id: auth.currentUser.uid,
+        name: auth.currentUser.displayName,
+        photo: auth.currentUser.photoURL,
+      },
+      createdAt: serverTimestamp(),
+    });
   };
   return (
     <div className="chat-room">
@@ -17,11 +31,7 @@ const ChatPage = ({ room, setRoom }) => {
         <button onClick={() => setRoom(null)}>Different Room</button>
       </header>
 
-      <main>
-        <div className="warn">
-          <p>Send the first message to the chat!</p>
-        </div>
-      </main>
+      <Main room={room} />
 
       <form onSubmit={handleSubmit} className="message-form">
         <input

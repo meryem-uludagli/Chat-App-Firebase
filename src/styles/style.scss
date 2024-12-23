@@ -124,6 +124,8 @@ button {
 
 .chat-room main {
   display: flex;
+  flex-direction: column;
+  color: black;
 
   .warn {
     flex: 1;
