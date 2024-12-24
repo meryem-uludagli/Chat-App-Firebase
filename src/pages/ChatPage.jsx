@@ -29,7 +29,7 @@ const ChatPage = ({ room, setRoom }) => {
     });
   };
   return (
-    <div className="chat-room">
+    <div className="chat-page">
       <header>
         <p>{auth.currentUser.displayName}</p>
         <p>{room}</p>
